@@ -82,18 +82,34 @@ X = [ones(m, 1) X];
 fprintf('Running gradient descent ...\n');
 
 % Choose some alpha value
-alpha = .01;
 num_iters = 400;
-theta = zeros(3, 1);
+alpha = [.03 .1 .3 1];
 
-% Init Theta and Run Gradient Descent 
-[theta, J_history] = gradientDescentMulti(X, y, theta, alpha, num_iters);
+J_hists = zeros(num_iters, length(alpha));
+
+for i=1:length(alpha)
+    theta = zeros(3, 1);
+    [theta, J_history] = gradientDescentMulti(X, y, theta, alpha(1,i), num_iters);
+    J_hists(:,i) = J_history;
+end
 
 % Plot the convergence graph
 figure;
-plot(1:numel(J_history), J_history, '-b', 'LineWidth', 2);
+plot(1:numel(J_history), J_hists(:,1), '-b', 'LineWidth', 2);
+hold on;
 xlabel('Number of iterations');
 ylabel('Cost J');
+
+labels = {};
+labels{1} = sprintf("%.2f",alpha(1,1));
+for i=2:length(alpha)
+    plot(1:numel(J_history), J_hists(:,i), '-', 'LineWidth', 2);
+    labels{i} = sprintf("%.2f",alpha(1,i));
+end
+legend(labels);
+
+pause;
+
 
 % Display gradient descent's result
 fprintf('Theta computed from gradient descent: \n');
@@ -112,7 +128,7 @@ price = prediction_input*theta; % You should change this
 
 
 % ============================================================
-
+ 
 fprintf(['Predicted price of a 1650 sq-ft, 3 br house ' ...
          '(using gradient descent):\n $%f\n'], price);
 
@@ -141,7 +157,7 @@ m = length(y);
 
 % Add intercept term to X
 X = [ones(m, 1) X];
-
+ 
 % Calculate the parameters from the normal equation
 theta = normalEqn(X, y);
 
@@ -153,7 +169,7 @@ fprintf('\n');
 
 % Estimate the price of a 1650 sq-ft, 3 br house
 % ====================== YOUR CODE HERE ======================
-price = 0; % You should change this
+price = [1 1650 3] * theta; % You should change this
 
 
 % ============================================================
