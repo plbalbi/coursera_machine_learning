@@ -49,17 +49,17 @@ X = [ones(m, 1) X];
 %                 initial_theta, options);
 %
 
+options = optimset('GradObj', 'on', 'MaxIter', 50);
 
+for i = 1:num_labels
 
+    % Minimize parameters for current label, against rest of them
+    [current_theta, trash1, trash2] = ... 
+        fmincg(@(t)(lrCostFunction(t, X, y == i, lambda )), zeros(n+1,1), options);
+    % save minimized parameters in corresponding all_theta row
+    all_theta(i,:) = current_theta';
 
-
-
-
-
-
-
-
-
+endfor
 % =========================================================================
 
 

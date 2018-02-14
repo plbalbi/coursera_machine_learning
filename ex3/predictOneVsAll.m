@@ -31,6 +31,12 @@ X = [ones(m, 1) X];
 %       
 
 
+% predictions_probs is an |examples| x K matrix whose value i,j contains
+% the probability of example i, being of class j
+predictions_probs = sigmoid(X * all_theta');
+
+[trash, p] = max( predictions_probs, [], 2 );
+
 
 
 

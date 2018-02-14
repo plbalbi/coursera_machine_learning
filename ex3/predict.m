@@ -21,12 +21,15 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+% Adding bias unit to first layer activations
+X = [ones(size(X,1),1) X];
+z_2 = Theta1 * X';
+a_2 = sigmoid(z_2);
+a_2_biased = [ones(1,size(a_2,2)) ; a_2];
+z_3 = Theta2 * a_2_biased;
+a_3 = sigmoid(z_3);
 
-
-
-
-
-
+[trash p] = max(a_3', [], 2);
 
 
 % =========================================================================
