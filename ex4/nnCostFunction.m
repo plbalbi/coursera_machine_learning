@@ -39,6 +39,9 @@ Theta2_grad = zeros(size(Theta2));
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
 
+Delta1 = zeros(size(Theta1));
+Delta2 = zeros(size(Theta2));
+
 for i=1:m
     printf('Forwarding %d-ith training example\r',i); fflush(stdout);
     % Forward propagate training i-th example 
@@ -50,6 +53,15 @@ for i=1:m
     % Calculate cost function for i-th example, and add up to J
     y_ith = zeros(num_labels,1); y_ith(y(i,1),1)=1; % i-th training label
     J += sum(-y_ith .* log(a_3) - (1-y_ith) .* log(1 - a_3));
+
+    % Backpropagating results
+    % Backprograte errors to calculate gradients
+    delta_3 = a_3 - y_ith;
+    delta_2 = (Theta2' * delta_3) .* sigmoidGradient(z_2);
+    delta_2 = delta_2(2:end); % remove delta_2_0
+    % Aggregate i-th example gradients
+    Delta2 += delta_3 * a_2' ;
+    Delta1 += delta_2 * a_1' ;
 end
 % avg cost function over examples
 J *= 1/m;
@@ -57,7 +69,9 @@ J *= 1/m;
 % outside loop beacuse its independant of the training examples
 J += (lambda/(2*m)) * (sum(sum(Theta1 .^ 2)) + sum(sum(Theta2 .^ 2)));
 
-
+% Calculate gradients
+Theta2_grad = (1/m) * Delta2;
+Theta1_grad = (1/m) * Delta1;
 
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
