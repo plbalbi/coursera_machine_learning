@@ -37,7 +37,8 @@ fprintf('Will train with following params\n');
 fprintf('C list: ');display(C_params_list);
 fprintf('sigma list: ');display(sigma_params_list);
 
-results_matrix = zeros(PAR_COUNT,PAR_COUNT);
+results_matrix = zeros(PAR_COUNT^2,3);
+current_row=1
 for i=1:PAR_COUNT
 	C_current = C_params_list(i);
 	for j=1:PAR_COUNT
@@ -47,8 +48,11 @@ for i=1:PAR_COUNT
 		model= svmTrain(X, y, C_current, @(x1, x2) gaussianKernel(x1, x2, sigma_curr));
 		predictions = svmPredict(model, Xval);
 
-		results_matrix(i,j) = mean(double( predictions ~= yval));
-		fprintf('Error found: %.4f\n\n', results_matrix(i,j));
+        results_matrix(current_row,:) = ...
+            [C_current, sigma_curr, mean(double( predictions ~= yval))];
+
+		fprintf('Error found: %.4f\n\n', results_matrix(current_row,3));
+        current_row++;
 	end
 end
 
@@ -56,14 +60,15 @@ fprintf('ErrorMatrix: \n');
 display(results_matrix);
 
 % Find minimums across errors matrix
-[min_error, me_row] = min(min(results_matrix, [], 1));
-[min_error, me_col] = min(min(results_matrix, [], 2));
+sorted_results=sortrows(results_matrix, 3);
+min_error=sorted_results(1,3);
+C=sorted_results(1,1);
+sigma=sorted_results(1,2);
 
 fprintf('The minimum error is %.4f, with parameters\nC=%.2f\nsigma=%.2f',...
-	min_error, C_params_list(me_row), sigma_params_list(me_col));
+	min_error, C, sigma);
 
 % Save return paramaters
-C = C_params_list(me_row); sigma = sigma_params_list(me_col);
 % =========================================================================
 
 end
