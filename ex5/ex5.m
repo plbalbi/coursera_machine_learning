@@ -164,7 +164,7 @@ pause;
 %  lambda to see how the fit and learning curve change.
 %
 
-lambda = 0;
+lambda = 1.5;
 [theta] = trainLinearReg(X_poly, y, lambda);
 
 % Plot training data and fit
@@ -218,3 +218,16 @@ end
 
 fprintf('Program paused. Press enter to continue.\n');
 pause;
+
+%% calculating test error with minumum lambda
+
+[trash min_index] = min(error_val);
+lambda_min = lambda_vec(min_index);
+theta_trained = trainLinearReg(X_poly, y, lambda_min);
+
+[min_test_error trash] = linearRegCostFunction(...
+    X_poly_test, ytest, theta_trained, 0);
+
+fprintf('The test set error for lamda=%f is : %f\n', lambda_min, ...
+    min_test_error)
+

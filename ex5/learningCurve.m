@@ -51,15 +51,22 @@ error_val   = zeros(m, 1);
 %       end
 %
 
-% ---------------------- Sample Solution ----------------------
-
-
-
-
-
-
-
-% -------------------------------------------------------------
+RETRIALS = 50;
+for i = 1:m
+    err_train_j = 0;
+    err_val_j = 0;
+    for j = 1:RETRIALS
+        rand_X_idx = randi(m,i,1);
+        theta_i = trainLinearReg(X(rand_X_idx,:), y(rand_X_idx,1), lambda);
+        [a trash] =...
+            linearRegCostFunction(X(rand_X_idx,:), y(rand_X_idx,1), theta_i, 0);
+        [b trash] = linearRegCostFunction(Xval, yval, theta_i, 0);
+        err_train_j += a;
+        err_val_j += b;
+    end
+error_train(i,1) = err_train_j/RETRIALS;
+error_val(i,1) = err_val_j/RETRIALS;
+end
 
 % =========================================================================
 
