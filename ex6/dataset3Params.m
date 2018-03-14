@@ -52,6 +52,9 @@ for i=1:PAR_COUNT
 	end
 end
 
+fprintf('ErrorMatrix: \n');
+display(results_matrix);
+
 % Find minimums across errors matrix
 [min_error, me_row] = min(min(results_matrix, [], 1));
 [min_error, me_col] = min(min(results_matrix, [], 2));
