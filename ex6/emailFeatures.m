@@ -48,12 +48,10 @@ x = zeros(n, 1);
 %
 %
 
-
-
-
-
-
-
+for i = 1:size(word_indices) 
+    % assign 1 to the word_indeces(i)-ith element of x
+    x(word_indices(i),1) = 1;
+end
 
 % =========================================================================
     

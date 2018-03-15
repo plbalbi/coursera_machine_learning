@@ -97,17 +97,14 @@ while ~isempty(email_contents)
     %       str2). It will return 1 only if the two strings are equivalent.
     %
 
-
-
-
-
-
-
-
-
-
+    [is_mem, is_mem_idx] = ismember(vocabList, {str});
+    if sum(is_mem) > 0 % Means at least one index is 1 => exists in vocabList
+        % find corresponding index by maximum, since is the only element with one
+        [trash, is_mem_idx] = max(is_mem);
+        % add it to word_indices vector
+        word_indices = [word_indices; is_mem_idx];
+    end
     % =============================================================
-
 
     % Print to screen, ensuring that the output lines are not too long
     if (l + length(str) + 1) > 78
