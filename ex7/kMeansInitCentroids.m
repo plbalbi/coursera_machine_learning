@@ -13,7 +13,7 @@ centroids = zeros(K, size(X, 2));
 %               the dataset X
 %
 randomIndexes = randperm(size(X,1));
-centroids = X(randomIndexes(1:K,1),:);
+centroids = X(randomIndexes(1:K),:);
 % =============================================================
 
 end
